@@ -23,13 +23,26 @@ app.post("/cadastrar", (request, response)=> {
     const{ user } = request.body
     console.log(user)
 
+    const insertCommand = `
+    INSERT INTO guilhermemoraes_02mb (name, email, password)
+    VALUES (?, ?, ?)
+    
+    `
+    
+    database.query(insertCommand, [user.name, user.email, user.password], (error) =>{
+        if(error){
+            console.log(error)
+            return
+        }
     response.status(201).json({message: "Usuário conectado com sucesso!"})
+})
 })
 
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}!`)
 })
+
 
 
 const database = mysql2.createPool({
