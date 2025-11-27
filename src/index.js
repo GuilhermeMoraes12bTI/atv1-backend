@@ -27,8 +27,28 @@ app.get("/", (request, response) => {
    })
 })
 
+app.post("/login", (request, response) => {
+   const { email, password } = request.body.user
 
-app.post("/cadastrar", (request, response)=> {
+   const selectCommand = "SELECT * FROM guilhermemoraes_02mb WHERE email = ?"
+
+   database.query(selectCommand, [email], (error, user )  => {
+    if(error){
+        console.log(error)
+        return
+    }
+
+    if (user.length  === 0 || user[0].password !== password){
+        response.json({ message: "Usuários ou senha incorretos!" })
+        return
+    }
+
+    response.json({ id: user[0].id, name: user[0].name})
+   })
+})
+
+
+    app.post("/cadastrar", (request, response)=> {
     const{ user } = request.body
     console.log(user)
 
